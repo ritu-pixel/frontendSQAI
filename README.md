@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Sensitive Data Processor
+
+A web application for uploading CSV files and performing sensitive data transformations such as anonymization, synthesis, and balancing. The app features a modern UI with a video background and supports previewing and downloading processed data.
+
+## Features
+
+- **User Authentication:** Register and login with secure forms.
+- **CSV Upload:** Upload your CSV files for processing.
+- **Transformations:**
+  - **Anonymize:** Remove or mask sensitive information.
+  - **Synthesize:** Generate synthetic data based on your dataset.
+  - **Balance:** Balance your dataset by a target column.
+- **Automatic Model Selection:** Detects data type (finance, health, education) based on columns.
+- **Preview:** View processed data in a scrollable table.
+- **Download:** Download the result as a CSV file.
+- **Modern UI:** Video background, transparent content boxes, and glowing buttons for a sleek look.
 
 ## Getting Started
 
-First, run the development server:
+### Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repository:
+   ```bash
+   git clone Sensitive-Data-Processor
+   cd Sensitive-Data-Processor
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+3. Place your background video as `public/background.mp4` (or update the path in the code).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-## Learn More
+5. Ensure your backend API is running at `http://localhost:5000`.
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Register a new account or login.
+2. Upload a CSV file.
+3. Select a transformation and (if needed) specify the target column.
+4. Click **Process** to preview the result.
+5. Download the processed data as a CSV file.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+- `app/` - Main Next.js app directory
+  - `dashboard/` - Dashboard page for data processing
+  - `login/` - Login page
+  - `page.js` - Registration page
+- `public/` - Static files (place your video here)
+- `README.md` - Project documentation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Customization
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Video Background:** Replace `public/background.mp4` with your own video.
+- **Styling:** Tailwind CSS is used for styling. Adjust classes as needed.
+
+## License
+
+MIT
+
+---
+
