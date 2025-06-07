@@ -1,103 +1,130 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function RegisterPage() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    try {
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Registration failed');
+      }
+
+      setSuccess('Registration successful! Redirecting to login...');
+      setTimeout(() => router.push('/login'), 1500);
+    } catch (err) {
+      setError('Registration failed: ' + err.message);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-50 px-4 overflow-hidden">
+      {/* Video Background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+      >
+        <source src="/background.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      {/* White overlay */}
+      <div className="absolute top-0 left-0 w-full h-full bg-white/30 z-0"></div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <form
+        onSubmit={handleSubmit}
+        className="relative z-10 bg-black/70 p-10 rounded-2xl shadow-2xl w-full max-w-lg border border-blue-100"
+      >
+        <h2 className="text-3xl font-extrabold text-blue-450 mb-6 text-center">
+          Register for Sensitive Data Processor
+        </h2>
+
+        {error && (
+          <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 p-2 rounded">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="mb-4 text-sm text-blue-600 bg-blue-50 border border-blue-200 p-2 rounded">
+            {success}
+          </div>
+        )}
+
+        <div className="mb-5">
+          <label className="block text-sm font-medium text-white-700 mb-1">
+            Username
+          </label>
+          <input
+            type="text"
+            placeholder="Enter your username"
+            className="w-full px-4 py-2 border border-white-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none transition text-white-800"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+<div className="mb-6">
+  <label className="block text-sm font-medium text-white-700 mb-1">
+    Password
+  </label>
+  <input
+    type={showPassword ? 'text' : 'password'} // Toggle here
+    placeholder="Enter your password"
+    className="w-full px-4 py-2 border border-white-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none transition text-white-800"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    required
+  />
+  <div className="mt-2">
+    <label className="text-sm text-white-600 cursor-pointer">
+      <input
+        type="checkbox"
+        className="mr-2"
+        checked={showPassword}
+        onChange={() => setShowPassword(!showPassword)}
+      />
+      Show Password
+    </label>
+  </div>
+</div>
+
+
+        <button
+          type="submit"
+          className="w-full bg-black text-white font-semibold py-2 rounded-lg transition duration-500 shadow-none hover:shadow-[0_0_24px_8px_rgba(255,255,255,0.7)]"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          Register
+        </button>
+        <p className="mt-4 text-center text-sm text-white-600">
+          Already have an account?{' '}
+          <a
+            href="/login"
+            className="text-blue-300 hover:underline hover:shadow-[0_0_16px_4px_rgba(59,130,246,0.5)] transition-shadow rounded"
+          >
+            Login
+          </a>
+        </p>
+      </form>
+    </main>
   );
 }
