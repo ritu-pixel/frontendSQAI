@@ -75,7 +75,8 @@ useEffect(() => {
         }
 
         try {
-          const response = await fetch(`http://localhost:5000${endpoint}`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoint}`, {
+
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
