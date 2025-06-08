@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { registerUser } from '@/lib/api';
 
 export default function RegisterPage() {
   const [username, setUsername] = useState('');
@@ -11,26 +12,19 @@ export default function RegisterPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    
     try {
-      const response = await fetch('http://localhost:5000/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-
+      await registerUser(username, password);
       setSuccess('Registration successful! Redirecting to login...');
       setTimeout(() => router.push('/login'), 1500);
     } catch (err) {
-      setError('Registration failed: ' + err.message);
+      setError(err.message.includes('Failed to fetch') 
+        ? 'Could not connect to the server. Please try again later.'
+        : err.message);
     }
   };
 
@@ -83,31 +77,30 @@ export default function RegisterPage() {
           />
         </div>
 
-<div className="mb-6">
-  <label className="block text-sm font-medium text-white-700 mb-1">
-    Password
-  </label>
-  <input
-    type={showPassword ? 'text' : 'password'} // Toggle here
-    placeholder="Enter your password"
-    className="w-full px-4 py-2 border border-white-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none transition text-white-800"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    required
-  />
-  <div className="mt-2">
-    <label className="text-sm text-white-600 cursor-pointer">
-      <input
-        type="checkbox"
-        className="mr-2"
-        checked={showPassword}
-        onChange={() => setShowPassword(!showPassword)}
-      />
-      Show Password
-    </label>
-  </div>
-</div>
-
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-white-700 mb-1">
+            Password
+          </label>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Enter your password"
+            className="w-full px-4 py-2 border border-white-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none transition text-white-800"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div className="mt-2">
+            <label className="text-sm text-white-600 cursor-pointer">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={showPassword}
+                onChange={() => setShowPassword(!showPassword)}
+              />
+              Show Password
+            </label>
+          </div>
+        </div>
 
         <button
           type="submit"
